@@ -44,7 +44,7 @@ const routes: RouteObject[] = [
                 element: <Djradio />,
             },
             {
-                path: '/discover/singer',
+                path: '/discover/artist',
                 element: <Singer />,
             },
             {
