@@ -1,9 +1,12 @@
 import { configureStore } from '@reduxjs/toolkit';
+
 import counter from '@/store/modules/count';
+import recommendReducer from '@/views/discover/recommend/store';
 
 const store = configureStore({
     reducer: {
         counter,
+        recommend: recommendReducer,
     },
 });
 

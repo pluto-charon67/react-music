@@ -100,19 +100,19 @@ class Request {
         });
     }
 
-    get<T>(url: string, config?: MyAxiosRequestConfig<T>) {
+    get<T = any>(url: string, config?: MyAxiosRequestConfig<T>) {
         return this.request({ ...config, method: 'GET', url });
     }
 
-    post<T>(url: string, config?: MyAxiosRequestConfig<T>) {
+    post<T = any>(url: string, config?: MyAxiosRequestConfig<T>) {
         return this.request({ ...config, method: 'POST', url });
     }
 
-    put<T>(url: string, config?: MyAxiosRequestConfig<T>) {
+    put<T = any>(url: string, config?: MyAxiosRequestConfig<T>) {
         return this.request({ ...config, method: 'PUT', url });
     }
 
-    delete<T>(url: string, config?: MyAxiosRequestConfig<T>) {
+    delete<T = any>(url: string, config?: MyAxiosRequestConfig<T>) {
         return this.request({ ...config, method: 'DELETE', url });
     }
 }
