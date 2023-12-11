@@ -1,11 +1,15 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { getBanners } from '../service';
+import { getBanners, getHotRecommend, getNewAlbums } from '../service';
 
 interface IRecommendstate {
     banners: any[];
+    hotRecommends: any[];
+    newAblums: any[];
 }
 const initialState: IRecommendstate = {
     banners: [],
+    hotRecommends: [],
+    newAblums: [],
 };
 
 export const fetchBannersAction = createAsyncThunk('banners', async (arg, { getState, dispatch }) => {
@@ -18,12 +22,28 @@ export const fetchBannersAction = createAsyncThunk('banners', async (arg, { getS
     return res.data;
 });
 
+export const fetchHotRecommendAction = createAsyncThunk('hotRecommend', async (arg, { getState, dispatch }) => {
+    const res = await getHotRecommend();
+    dispatch(changeHotRecommendAction(res.result));
+});
+
+export const fetchNewAblumAction = createAsyncThunk('newAlbum', async (arg, { getState, dispatch }) => {
+    const res = await getNewAlbums();
+    dispatch(changeNewAlbumAction(res.albums));
+});
+
 const recommendSlice = createSlice({
     name: 'recommend',
     initialState,
     reducers: {
         changeBannersAction(state, { payload }) {
             state.banners = payload;
+        },
+        changeHotRecommendAction(state, { payload }) {
+            state.hotRecommends = payload;
+        },
+        changeNewAlbumAction(state, { payload }) {
+            state.newAblums = payload;
         },
     },
     // 监听createAsyncThunk的异步请求的结果，这是redux官方推荐的
@@ -37,5 +57,5 @@ const recommendSlice = createSlice({
     //         });
     // },
 });
-export const { changeBannersAction } = recommendSlice.actions;
+export const { changeBannersAction, changeHotRecommendAction, changeNewAlbumAction } = recommendSlice.actions;
 export default recommendSlice.reducer;
