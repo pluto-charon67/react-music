@@ -1,15 +1,19 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { getBanners, getHotRecommend, getNewAlbums } from '../service';
+import { getBanners, getHotRecommend, getNewAlbums, getTopList, getSonger } from '../service';
 
 interface IRecommendstate {
     banners: any[];
     hotRecommends: any[];
     newAblums: any[];
+    ranking: any[];
+    singer: any[];
 }
 const initialState: IRecommendstate = {
     banners: [],
     hotRecommends: [],
     newAblums: [],
+    ranking: [],
+    singer: [],
 };
 
 export const fetchBannersAction = createAsyncThunk('banners', async (arg, { getState, dispatch }) => {
@@ -32,6 +36,24 @@ export const fetchNewAblumAction = createAsyncThunk('newAlbum', async (arg, { ge
     dispatch(changeNewAlbumAction(res.albums));
 });
 
+const ranking1ds = [19723756, 3779629, 2884035];
+export const fetchRankingDataAction = createAsyncThunk('rankingData', async (arg, { getState, dispatch }) => {
+    const promises: Promise<any>[] = [];
+    for (const id of ranking1ds) {
+        promises.push(getTopList(id));
+    }
+    Promise.all(promises).then((res) => {
+        const playlists = res.map((item) => item.playlist);
+        dispatch(changeRankingDataAction(playlists));
+    });
+});
+
+export const fetchSingerDataAction = createAsyncThunk('singerData', async (arg, { getState, dispatch }) =>
+    getSonger().then((res) => {
+        dispatch(changeSingerDataAction(res.artists));
+    }),
+);
+
 const recommendSlice = createSlice({
     name: 'recommend',
     initialState,
@@ -45,6 +67,12 @@ const recommendSlice = createSlice({
         changeNewAlbumAction(state, { payload }) {
             state.newAblums = payload;
         },
+        changeRankingDataAction(state, { payload }) {
+            state.ranking = payload;
+        },
+        changeSingerDataAction(state, { payload }) {
+            state.singer = payload;
+        },
     },
     // 监听createAsyncThunk的异步请求的结果，这是redux官方推荐的
     // extraReducers: (builder) => {
@@ -57,5 +85,11 @@ const recommendSlice = createSlice({
     //         });
     // },
 });
-export const { changeBannersAction, changeHotRecommendAction, changeNewAlbumAction } = recommendSlice.actions;
+export const {
+    changeBannersAction,
+    changeHotRecommendAction,
+    changeNewAlbumAction,
+    changeRankingDataAction,
+    changeSingerDataAction,
+} = recommendSlice.actions;
 export default recommendSlice.reducer;

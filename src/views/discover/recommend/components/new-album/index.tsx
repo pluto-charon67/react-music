@@ -5,6 +5,7 @@ import { Carousel } from 'antd';
 import Container from './style';
 import AreaHeader from '@/components/area-header';
 import { useAppSelector, appShallowEqual } from '@/hooks/app';
+import NewAblumItem from '@/components/new-ablum-item';
 
 interface IProps {
     children?: ReactNode;
@@ -33,10 +34,12 @@ const NewAlbum: FC<IProps> = memo((props) => {
                         <Carousel ref={bannerRef} speed={1000}>
                             {[0, 1].map((item) => {
                                 return (
-                                    <div className="album-list" key={item}>
-                                        {newAblums.slice(item * 5, (item + 1) * 5).map((i) => {
-                                            return <div key={i.name}>{i?.name}</div>;
-                                        })}
+                                    <div key={item}>
+                                        <div className="album-list">
+                                            {newAblums.slice(item * 5, (item + 1) * 5).map((i) => {
+                                                return <NewAblumItem key={i.id} data={i}></NewAblumItem>;
+                                            })}
+                                        </div>
                                     </div>
                                 );
                             })}
